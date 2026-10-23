@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: invoice-action-agent
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: A2A_BASE_URL
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://api.openai.com/v1
+      - key: LLM_MODEL
+        value: gpt-4o-mini
+      - key: LLM_API_KEY
+        sync: false
+      - key: DB_PATH
+        value: /var/data/invoice_agent.db
+    disk:
+      name: invoice-agent-data
+      mountPath: /var/data
+      sizeGB: 1
